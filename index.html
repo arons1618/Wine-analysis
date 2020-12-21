@@ -14649,6 +14649,7 @@ Requirement already satisfied: click in /opt/conda/lib/python3.8/site-packages (
 
 
 </html>
+
 <!DOCTYPE html>
 <html>
 <head><meta charset="utf-8" />
@@ -27760,10 +27761,10 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Requirement already satisfied: nltk in /opt/conda/lib/python3.8/site-packages (3.5)
-Requirement already satisfied: joblib in /opt/conda/lib/python3.8/site-packages (from nltk) (0.16.0)
-Requirement already satisfied: click in /opt/conda/lib/python3.8/site-packages (from nltk) (7.1.2)
-Requirement already satisfied: tqdm in /opt/conda/lib/python3.8/site-packages (from nltk) (4.48.2)
 Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (from nltk) (2020.11.13)
+Requirement already satisfied: click in /opt/conda/lib/python3.8/site-packages (from nltk) (7.1.2)
+Requirement already satisfied: joblib in /opt/conda/lib/python3.8/site-packages (from nltk) (0.16.0)
+Requirement already satisfied: tqdm in /opt/conda/lib/python3.8/site-packages (from nltk) (4.48.2)
 </pre>
 </div>
 </div>
@@ -27800,90 +27801,14 @@ Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As seen in the previous section just performing regression analysis, k-nearest neighbors, linear discriminant analysis and other forms of algorithms is not very good at predicting the points given to a bottle of wine. Below we attempt to see if taking in a more specialized feature can have an impact on the accuracy of predicting the score.</p>
-
+<h1 id="Wine-Points-Prediction">Wine Points Prediction<a class="anchor-link" href="#Wine-Points-Prediction">&#182;</a></h1>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="TF-IDF-for-reviews">TF-IDF for reviews<a class="anchor-link" href="#TF-IDF-for-reviews">&#182;</a></h2>
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Below is a function that will assign a classification to a row in the dataframe based off the score that is passed into it.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="k">def</span> <span class="nf">classify_wine_points</span><span class="p">(</span><span class="n">score</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">83</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;ok&#39;</span>
-    <span class="k">elif</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">85</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;below average&#39;</span>
-    <span class="k">elif</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">86</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;average&#39;</span>
-    <span class="k">elif</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">88</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;good&#39;</span>
-    <span class="k">elif</span> <span class="n">score</span> <span class="o">&lt;=</span> <span class="mi">94</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;great&#39;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;perfect&#39;</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>We separate the dataframe into values respective of its classification. This is done inorder to have an equal samples from each range. We then take a sample of 2000 from each classification.</p>
-<p><strong>Note:</strong> a sample is being used due to the kernel running out of memory due to the jupyter notebook kernel running out of memory when performing analysis otherwise as a result predictions depend on the sample that is given as it is obtained randomly. Furthermore these predictions vary with $\pm1\%$</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">wine_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;wine.csv&quot;</span><span class="p">)</span>
-<span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">classify_wine_points</span><span class="p">)</span>
-<span class="n">reviews_ok</span> <span class="o">=</span> <span class="n">wine_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;ok&#39;</span><span class="p">]</span>
-<span class="n">reviews_ba</span> <span class="o">=</span> <span class="n">wine_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;below average&#39;</span><span class="p">]</span>
-<span class="n">reviews_a</span> <span class="o">=</span> <span class="n">wine_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;average&#39;</span><span class="p">]</span>
-<span class="n">reviews_good</span> <span class="o">=</span> <span class="n">wine_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;good&#39;</span><span class="p">]</span>
-<span class="n">reviews_great</span> <span class="o">=</span> <span class="n">wine_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;great&#39;</span><span class="p">]</span>
-<span class="n">reviews_p</span> <span class="o">=</span> <span class="n">wine_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">wine_df</span><span class="p">[</span><span class="s1">&#39;classification&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;perfect&#39;</span><span class="p">]</span>
-
-<span class="n">reviews</span> <span class="o">=</span> <span class="n">reviews_ok</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reviews_ba</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>\
-<span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reviews_a</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>\
-<span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reviews_good</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>\
-<span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reviews_great</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span>\
-<span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reviews_p</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">2000</span><span class="p">))</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Because we are focusing on the description (review) of the wine here is an example of one</p>
+<p><strong>Note:</strong> a sample is being used due to the kernel running out of memory due to the jupyter notebook kernel running out of memory and dying when performing analysis otherwise as a result predictions depend on the sample that is given as it is obtained randomly. Furthermore these predictions vary with $\pm1\%$</p>
 
 </div>
 </div>
@@ -27893,7 +27818,12 @@ Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (
 <div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reviews</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">wine_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;wine.csv&quot;</span><span class="p">)</span>
+<span class="n">str_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">,</span> <span class="s1">&#39;price&#39;</span><span class="p">,</span>  <span class="s1">&#39;title&#39;</span><span class="p">,</span> <span class="s1">&#39;variety&#39;</span><span class="p">,</span> <span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;designation&#39;</span><span class="p">,</span> <span class="s1">&#39;province&#39;</span><span class="p">,</span> <span class="s1">&#39;winery&#39;</span><span class="p">]</span>
+
+<span class="n">reviews</span> <span class="o">=</span> <span class="n">wine_df</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="mi">20000</span><span class="p">)[[</span><span class="s1">&#39;points&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">str_cols</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">reviews</span> <span class="o">=</span> <span class="n">reviews</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;index&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">reviews</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -27910,9 +27840,100 @@ Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (
 
 
 
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<div class="output_text output_subarea output_execute_result">
-<pre>&#39;A soft, simple, fruity Merlot. Tastes like a cherry, blackberry, roasted almond, cocoa and cinnamon granola bar, melted into wine.&#39;</pre>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>points</th>
+      <th>description</th>
+      <th>price</th>
+      <th>title</th>
+      <th>variety</th>
+      <th>country</th>
+      <th>designation</th>
+      <th>province</th>
+      <th>winery</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>83</td>
+      <td>Barely ripe, with green citrus and feline spra...</td>
+      <td>18.0</td>
+      <td>Starmont 2009 Sauvignon Blanc (Napa Valley)</td>
+      <td>Sauvignon Blanc</td>
+      <td>US</td>
+      <td>NaN</td>
+      <td>California</td>
+      <td>Starmont</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>90</td>
+      <td>This 100% Syrah shows intense blackberry, crèm...</td>
+      <td>45.0</td>
+      <td>Donelan 2010 Cuvee Christine Syrah (Sonoma Cou...</td>
+      <td>Syrah</td>
+      <td>US</td>
+      <td>Cuvee Christine</td>
+      <td>California</td>
+      <td>Donelan</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>93</td>
+      <td>This year's dry conditions produced a fine cro...</td>
+      <td>47.0</td>
+      <td>Burmester 1989 Colheita Tawny  (Port)</td>
+      <td>Port</td>
+      <td>Portugal</td>
+      <td>Colheita Tawny</td>
+      <td>Port</td>
+      <td>Burmester</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>86</td>
+      <td>This is a plush and upfront wine that offers s...</td>
+      <td>14.0</td>
+      <td>Pelassa 2005  Barbera d'Alba</td>
+      <td>Barbera</td>
+      <td>Italy</td>
+      <td>NaN</td>
+      <td>Piedmont</td>
+      <td>Pelassa</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>87</td>
+      <td>Pineapple and mango aromas mix with notes of b...</td>
+      <td>12.0</td>
+      <td>Columbia Crest 2014 Grand Estates Chardonnay (...</td>
+      <td>Chardonnay</td>
+      <td>US</td>
+      <td>Grand Estates</td>
+      <td>Washington</td>
+      <td>Columbia Crest</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </div>
 
 </div>
@@ -27924,7 +27945,7 @@ Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>We remove punctuation and other special characters and convert everything to lower case as it is not significat that words be capitalized.</p>
+<p>We first have to change features that we are going to use from categorical to numerical varialbes. This is done in order to give the features meaning when performing different forms of analysis on them in order to predict the points given to a bottle of wine</p>
 
 </div>
 </div>
@@ -27934,68 +27955,13 @@ Requirement already satisfied: regex in /opt/conda/lib/python3.8/site-packages (
 <div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">descriptions</span> <span class="o">=</span> <span class="p">[]</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># assign numerical values to string columns</span>
 
-<span class="k">for</span> <span class="n">descrip</span> <span class="ow">in</span> <span class="n">reviews</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]:</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\W&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">descrip</span><span class="p">))</span>
-    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-    <span class="n">descriptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
-</pre></div>
+<span class="n">factorized_wine</span> <span class="o">=</span> <span class="n">reviews</span><span class="p">[</span><span class="n">str_cols</span><span class="p">]</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;description&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">str_cols</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+    <span class="n">factorized_wine</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">reviews</span><span class="p">[</span><span class="n">col</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
 
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Here we use <code>TfidfVectorizer</code>, in order to understand what it is what term frequency-inverse document frequency (TF_IDT) is must be explained first. TF-IDF is a measure that evaluates the relevancy that a word has for a document inside a collection of other documents. Furthermore TF-IDF can be defined as the following:</p>
-<p>$ \text{Term Frequency (TF)} = \frac{\text{Frequency of a word}}{\text{Total number of words in document}} $</p>
-<p>$ \text{Inverse Document Frequency (IDF)} = \log{\frac{\text{Total number of documents}}{\text{Number of documents that contain the word}}} $</p>
-<p>$ \text{TF-IDF} = \text{TF} \cdot \text{IDF} $</p>
-<p>In turn what <code>TfidfVectorizer</code> gives us is a list of feature lists that we can use as estimators for prediction.</p>
-<p>The parameters for <code>TfidfVectorizer</code> are max_features, max_df, and stop_words. 
-max_features tells us to only look at the top n features of the total document
-max_df causes the vectorizer to ignore terms that have a document frequency strictly higher than the given threshold. In our case because a float is its value we ignore words that appear in more that 80% of documents
-stop_words allows us to pass in a set of stop words. Stop words are words that add little to no meaning to a sentence. This includes words such as i, our, him, and her. 
-Folling this we fit and transform the data then we xplit it into training and testing data</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[18]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">reviews</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
-<span class="n">vec</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
-<span class="n">X</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">descriptions</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
-
-<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
-</pre></div>
-
-    </div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Now that our data is split into a training and test set we can use a machine learning algorithm in order to predict the outcome. Which in this case we attempt to predict the points (score) given to a bottle of wine. We do this with <code>RandomForestRegressor()</code>. given that its a random forest algorithm it takes the average of the decision trees that were created and used as estimates.</p>
-
-</div>
-</div>
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">In&nbsp;[7]:</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rfr</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
-<span class="n">rfr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+<span class="n">factorized_wine</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -28008,13 +27974,92 @@ Folling this we fit and transform the data then we xplit it into training and te
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[7]:</div>
+    <div class="prompt output_prompt">Out[5]:</div>
 
 
 
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<div class="output_text output_subarea output_execute_result">
-<pre>RandomForestRegressor()</pre>
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>price</th>
+      <th>title</th>
+      <th>variety</th>
+      <th>country</th>
+      <th>designation</th>
+      <th>province</th>
+      <th>winery</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>18.0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-1</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>45.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>47.0</td>
+      <td>2</td>
+      <td>2</td>
+      <td>1</td>
+      <td>1</td>
+      <td>1</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>14.0</td>
+      <td>3</td>
+      <td>3</td>
+      <td>2</td>
+      <td>-1</td>
+      <td>2</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>12.0</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>2</td>
+      <td>3</td>
+      <td>4</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 </div>
 
 </div>
@@ -28022,13 +28067,23 @@ Folling this we fit and transform the data then we xplit it into training and te
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we assign the variables we just factorized along with the price of the wine to be our X values and our y value will be what we are trying to predict, which in this case are the points for a bottle of wine.</p>
+
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pred</span> <span class="o">=</span> <span class="n">rfr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">factorized_wine</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">(</span><span class="s1">&#39;int64&#39;</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">reviews</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -28039,17 +28094,32 @@ Folling this we fit and transform the data then we xplit it into training and te
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we then need to determine how accurate this algorithm is given the estimates returned from the random forest regression. We do this by using <code>score()</code> which returns the coefficient of determination of the prediction ($r^2$). In other words it is the observed y variation that can be explained by the and by the regression model. We also perform a 10 fold cross validation and then taking the mean of the scores returned and compute the residual mean squared error of the model (rmse).</p>
+<p>Below we perform several different formst of prediction to see which one produces the best result.</p>
+<p>We then need to determine how accurate this algorithm is given the estimates returned from the random forest regression. We do this by using <code>score()</code> which returns the coefficient of determination of the prediction ($r^2$). In other words it is the observed y variation that can be explained by the and by the regression model. We also compute the residual mean squared error of the model (rmse).</p>
 
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="linear-regression">linear regression<a class="anchor-link" href="#linear-regression">&#182;</a></h3>
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:&#39;</span><span class="p">,</span> <span class="n">rfr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">linear_model</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">linear_model</span><span class="o">.</span><span class="n">LinearRegression</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:&#39;</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">))</span>
 <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rmse score:&#39;</span><span class="p">,</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 </pre></div>
 
@@ -28067,8 +28137,8 @@ Folling this we fit and transform the data then we xplit it into training and te
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>r2 score: 0.6470310143879181
-rmse score: 2.6484481808535856
+<pre>r2 score: 0.025621093791445948
+rmse score: 3.004001678134892
 </pre>
 </div>
 </div>
@@ -28077,13 +28147,35 @@ rmse score: 2.6484481808535856
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>as you can see this isnt the best prediction model so lets try some other methods and see what we get</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="linear-discriminant-analysis">linear discriminant analysis<a class="anchor-link" href="#linear-discriminant-analysis">&#182;</a></h3>
+</div>
+</div>
+</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cvs</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">rfr</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-<span class="n">cvs</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn.discriminant_analysis</span> <span class="kn">import</span> <span class="n">LinearDiscriminantAnalysis</span>
+
+<span class="n">lda_model</span> <span class="o">=</span> <span class="n">LinearDiscriminantAnalysis</span><span class="p">()</span>
+<span class="n">lda_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:&#39;</span><span class="p">,</span> <span class="n">lda_model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rmse score:&#39;</span><span class="p">,</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
 </pre></div>
 
     </div>
@@ -28096,15 +28188,14 @@ rmse score: 2.6484481808535856
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[10]:</div>
+    <div class="prompt"></div>
 
 
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>0.6106014527800235</pre>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>r2 score: 0.132
+rmse score: 3.1166648841349627
+</pre>
 </div>
-
 </div>
 
 </div>
@@ -28114,9 +28205,7 @@ rmse score: 2.6484481808535856
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>This is solely based off the description of the wine. As you can see this is a large improvement over any sort of prediction that was done with linear regression, k-nearest neighbor or linear discriminant analysis. However, it is still not the best for several reasons. The first being the r2 score, or how well our model is at making predictions. There is still a large portion of the data that is not being accurately predicted.</p>
-<p>The other issue pertains to when the model does fail at making the prediction. given that the rmse score is very high this can be interpreted as when we do fail we fail rather spectacualary. However, given that the context of this problem is making a prediction for determining arbitrary integer point values for bottles of wine, failing spectaculary is not necesarilly what is occuring. The rmse value tells use that with each incorrect prediction we are about 2.5 points off. However, it is still less than ideal.</p>
-<p>Below we see if we can improve upon these shortcomings.</p>
+<p>The results from this method are not good either so onto the next one</p>
 
 </div>
 </div>
@@ -28124,15 +28213,62 @@ rmse score: 2.6484481808535856
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Combining-features">Combining features<a class="anchor-link" href="#Combining-features">&#182;</a></h2>
+<h3 id="classification-tree">classification tree<a class="anchor-link" href="#classification-tree">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">sklearn</span> <span class="kn">import</span> <span class="n">tree</span>
+
+<span class="n">dt_model</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeClassifier</span><span class="p">()</span>
+<span class="n">dt_model</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+
+<span class="n">pred</span> <span class="o">=</span> <span class="n">dt_model</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:&#39;</span><span class="p">,</span> <span class="n">dt_model</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span><span class="n">y_test</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rmse score:&#39;</span><span class="p">,</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>r2 score: 0.1468
+rmse score: 3.2819506394825626
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The methods that we have done prior as well as this one are getting use nowhere and are showing very little signs of improvement so lets pivot to a different direction and try to predict the points based off of the description of the wine.</p>
+
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Now we factorize the other features of the dataset, specifically those mentioned in <code>str_cols</code> by factorizing categorical variables we are able to include them as estimators for our prediction</p>
-
+<h2 id="Incorporating-description">Incorporating description<a class="anchor-link" href="#Incorporating-description">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -28141,13 +28277,7 @@ rmse score: 2.6484481808535856
 <div class="prompt input_prompt">In&nbsp;[11]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># assign numerical values to string columns</span>
-<span class="n">str_cols</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;country&#39;</span><span class="p">,</span> <span class="s1">&#39;variety&#39;</span><span class="p">,</span> <span class="s1">&#39;province&#39;</span><span class="p">,</span> <span class="s1">&#39;region_1&#39;</span><span class="p">,</span> <span class="s1">&#39;winery&#39;</span><span class="p">]</span>
-<span class="n">factorized_wine</span> <span class="o">=</span> <span class="n">reviews</span><span class="p">[</span><span class="n">str_cols</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">str_cols</span><span class="p">:</span>
-    <span class="n">factorized_wine</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">factorize</span><span class="p">(</span><span class="n">reviews</span><span class="p">[</span><span class="n">col</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
-
-<span class="n">factorized_wine</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reviews</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 
     </div>
@@ -28183,53 +28313,77 @@ rmse score: 2.6484481808535856
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>country</th>
+      <th>points</th>
+      <th>description</th>
+      <th>price</th>
+      <th>title</th>
       <th>variety</th>
+      <th>country</th>
+      <th>designation</th>
       <th>province</th>
-      <th>region_1</th>
       <th>winery</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>83</td>
+      <td>Barely ripe, with green citrus and feline spra...</td>
+      <td>18.0</td>
+      <td>Starmont 2009 Sauvignon Blanc (Napa Valley)</td>
+      <td>Sauvignon Blanc</td>
+      <td>US</td>
+      <td>NaN</td>
+      <td>California</td>
+      <td>Starmont</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>1</td>
+      <td>90</td>
+      <td>This 100% Syrah shows intense blackberry, crèm...</td>
+      <td>45.0</td>
+      <td>Donelan 2010 Cuvee Christine Syrah (Sonoma Cou...</td>
+      <td>Syrah</td>
+      <td>US</td>
+      <td>Cuvee Christine</td>
+      <td>California</td>
+      <td>Donelan</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>2</td>
-      <td>2</td>
+      <td>93</td>
+      <td>This year's dry conditions produced a fine cro...</td>
+      <td>47.0</td>
+      <td>Burmester 1989 Colheita Tawny  (Port)</td>
+      <td>Port</td>
+      <td>Portugal</td>
+      <td>Colheita Tawny</td>
+      <td>Port</td>
+      <td>Burmester</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>0</td>
-      <td>2</td>
-      <td>1</td>
-      <td>3</td>
-      <td>3</td>
+      <td>86</td>
+      <td>This is a plush and upfront wine that offers s...</td>
+      <td>14.0</td>
+      <td>Pelassa 2005  Barbera d'Alba</td>
+      <td>Barbera</td>
+      <td>Italy</td>
+      <td>NaN</td>
+      <td>Piedmont</td>
+      <td>Pelassa</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>1</td>
-      <td>3</td>
-      <td>2</td>
-      <td>-1</td>
-      <td>4</td>
+      <td>87</td>
+      <td>Pineapple and mango aromas mix with notes of b...</td>
+      <td>12.0</td>
+      <td>Columbia Crest 2014 Grand Estates Chardonnay (...</td>
+      <td>Chardonnay</td>
+      <td>US</td>
+      <td>Grand Estates</td>
+      <td>Washington</td>
+      <td>Columbia Crest</td>
     </tr>
   </tbody>
 </table>
@@ -28241,6 +28395,276 @@ rmse score: 2.6484481808535856
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Because we are focusing on the description (review) of the wine here is an example of one</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">reviews</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[12]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&#34;A crisp, minerally wave of apples and pear start this wine from the cool-climate region of Elgin, and on the palate, it&#39;s equally delicate. Dry but with a touch of pretty sweetness, the wine is embraceable and a great solo sip.&#34;</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We remove punctuation and other special characters and convert everything to lower case as it is not significat that words be capitalized.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">descriptions</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">descrip</span> <span class="ow">in</span> <span class="n">reviews</span><span class="p">[</span><span class="s1">&#39;description&#39;</span><span class="p">]:</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\W&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">descrip</span><span class="p">))</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+    <span class="n">descriptions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+    
+<span class="nb">len</span><span class="p">(</span><span class="n">descriptions</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[13]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>20000</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Here we use <code>TfidfVectorizer</code>, in order to understand what it is what term frequency-inverse document frequency (TF_IDT) is must be explained first. TF-IDF is a measure that evaluates the relevancy that a word has for a document inside a collection of other documents. Furthermore TF-IDF can be defined as the following:</p>
+<p>$ \text{Term Frequency (TF)} = \frac{\text{Frequency of a word}}{\text{Total number of words in document}} $</p>
+<p>$ \text{Inverse Document Frequency (IDF)} = \log{\frac{\text{Total number of documents}}{\text{Number of documents that contain the word}}} $</p>
+<p>$ \text{TF-IDF} = \text{TF} \cdot \text{IDF} $</p>
+<p>In turn what <code>TfidfVectorizer</code> gives us is a list of feature lists that we can use as estimators for prediction.</p>
+<p>The parameters for <code>TfidfVectorizer</code> are max_features, max_df, and stop_words. 
+max_features tells us to only look at the top n features of the total document
+max_df causes the vectorizer to ignore terms that have a document frequency strictly higher than the given threshold. In our case because a float is its value we ignore words that appear in more that 80% of documents
+stop_words allows us to pass in a set of stop words. Stop words are words that add little to no meaning to a sentence. This includes words such as i, our, him, and her. 
+Folling this we fit and transform the data then we xplit it into training and testing data</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">y</span> <span class="o">=</span> <span class="n">reviews</span><span class="p">[</span><span class="s1">&#39;points&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">vec</span> <span class="o">=</span> <span class="n">TfidfVectorizer</span><span class="p">(</span><span class="n">max_features</span><span class="o">=</span><span class="mi">2500</span><span class="p">,</span> <span class="n">min_df</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">max_df</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">stop_words</span><span class="o">=</span><span class="n">stopwords</span><span class="o">.</span><span class="n">words</span><span class="p">(</span><span class="s1">&#39;english&#39;</span><span class="p">))</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">vec</span><span class="o">.</span><span class="n">fit_transform</span><span class="p">(</span><span class="n">descriptions</span><span class="p">)</span><span class="o">.</span><span class="n">toarray</span><span class="p">()</span>
+
+<span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now that we've split the data we use <code>RandomForestRegressor()</code> to make our prediciton given that its a random forest algorithm it takes the average of the decision trees that were created and used as estimates.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">rfr</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
+<span class="n">rfr</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[15]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>RandomForestRegressor()</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">pred</span> <span class="o">=</span> <span class="n">rfr</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now we check to see how good our model is at predicting the points for a bottle of wine</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:&#39;</span><span class="p">,</span> <span class="n">rfr</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;rmse score:&#39;</span><span class="p">,</span> <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">y_test</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">squared</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>r2 score: 0.4950601387266653
+rmse score: 2.1461066422710684
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">cvs</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">rfr</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">cvs</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt output_prompt">Out[18]:</div>
+
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>0.43710399909256914</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This is solely based off the description of the wine. As you can see this is a large improvement in both the score and rmse for any sort of prediction that was done with any of the methods performed above. However, it is still not the best for several reasons. The first being the $r^2$ score, or how well our model is at making predictions. There is still a large portion of the data that is not being accurately predicted.</p>
+<p>The other issue pertains to when the model does fail at making the prediction. given that the rmse score is very high this can be interpreted as when we do fail we fail rather spectacualary. However, given that the context of this problem is making a prediction for determining arbitrary integer point values for bottles of wine, failing spectaculary is not necesarilly what is occuring. The rmse value tells use that with each incorrect prediction we are about 2.1 points off. However, it is still less than ideal.</p>
+<p>Below we see if we can improve upon these shortcomings.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Combining-features">Combining features<a class="anchor-link" href="#Combining-features">&#182;</a></h2>
+</div>
+</div>
 </div>
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
@@ -28266,7 +28690,7 @@ rmse score: 2.6484481808535856
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[13]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">X_train</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_train</span><span class="p">,</span> <span class="n">y_test</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">test_size</span> <span class="o">=</span> <span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span> <span class="o">=</span> <span class="mi">12</span><span class="p">)</span>
@@ -28279,7 +28703,7 @@ rmse score: 2.6484481808535856
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[14]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">rfr_fac</span> <span class="o">=</span> <span class="n">RandomForestRegressor</span><span class="p">()</span>
@@ -28296,7 +28720,7 @@ rmse score: 2.6484481808535856
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[14]:</div>
+    <div class="prompt output_prompt">Out[21]:</div>
 
 
 
@@ -28313,7 +28737,7 @@ rmse score: 2.6484481808535856
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fac_pred</span> <span class="o">=</span> <span class="n">rfr_fac</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_test</span><span class="p">)</span>
@@ -28334,7 +28758,7 @@ rmse score: 2.6484481808535856
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;r2 score:&#39;</span><span class="p">,</span> <span class="n">rfr_fac</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">))</span>
@@ -28355,8 +28779,8 @@ rmse score: 2.6484481808535856
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>r2 score: 0.8008655035381019
-rmse score: 1.9892824753329192
+<pre>r2 score: 0.5738683914990945
+rmse score: 1.9715297968836283
 </pre>
 </div>
 </div>
@@ -28367,7 +28791,7 @@ rmse score: 1.9892824753329192
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython3"><pre><span></span><span class="n">fac_cvs</span> <span class="o">=</span> <span class="n">cross_val_score</span><span class="p">(</span><span class="n">rfr_fac</span><span class="p">,</span> <span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
@@ -28384,13 +28808,13 @@ rmse score: 1.9892824753329192
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[17]:</div>
+    <div class="prompt output_prompt">Out[24]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>0.7592042244065704</pre>
+<pre>0.5221010937266104</pre>
 </div>
 
 </div>
@@ -28402,7 +28826,23 @@ rmse score: 1.9892824753329192
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>As we can see from the scores computed above the accuracy drastically improves when the features from performing TF-IDF are combined with those from factorizing categorical variables in the dataset. We also improve upon the error when the model fails to make the correct prediction as it is about 2 points off instead of 2.5 points.</p>
+<p>As we can see from the scores computed above the accuracy is an improvement from only using the wine description (review) as a feature. Both the $r^2$ score and RMSE value improved by about 8% and 0.15 respectively. However, the model isnt all that reliable as there is only slightly above 50% of the bottles of wine from the sample can have their score predicted accurately</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Conclusion">Conclusion<a class="anchor-link" href="#Conclusion">&#182;</a></h1>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After comparing the price to the points for a bottle of wine we learned that the majority of the data is clustered towards the middle in regards to the point value a bottle was awarded and there are few outliers in either the positive or negative direction. Furthermore most wine follows the trend of having a greater number of points awarded as the price increases.</p>
+<p>From these trends we attempted to determine if we can actually predict how many points a bottle of wine will receive. Given the the best prediction that we could obtain took into account several features in addition with the price of the wine and only has 52% accuracy we are lead to believe that the point system that results from the wine in this dataset is more subjective than objective.</p>
 
 </div>
 </div>
